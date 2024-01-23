@@ -13,10 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\NovelController::class, 'Homepage']);
+
+Route::get('/novel/{id}', [App\Http\Controllers\NovelController::class, 'viewDetail']);
+
+Route::get('/group/{id}', [App\Http\Controllers\GroupController::class, 'GroupDetail']);
+
+Route::get('/genre/{id}', [App\Http\Controllers\NovelController::class, 'viewDetail']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/userList', 'AdminController@index')->middleware('admin');
+});
